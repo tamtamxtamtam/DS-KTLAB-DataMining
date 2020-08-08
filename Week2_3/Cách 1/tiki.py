@@ -6,7 +6,6 @@ import re
 from http.client import IncompleteRead
 
 
-
 start_url = "https://tiki.vn"
 page_url = "&_lc=&page={}"
 form_url = "https://tiki.vn{}"
@@ -42,7 +41,6 @@ def save_product_type(product_type_list=[]):
 #lấy link từng sản phẩm
 def crawl_product_id(product_type_list=[]):
     print(product_type_list[0])
-    print("hello")
     product_list = []
 
     for url in product_type_list:
@@ -91,11 +89,9 @@ def crawl_product(product_list=[]):
             response = requests.get(url)
         except IncompleteRead:
             continue
+            
         if (response.status_code != 200):
             continue
-
-
-        print(response)
         parser = BeautifulSoup(response.text, 'html.parser')
         if (parser.title is not None):
             name = parser.title.string
@@ -131,6 +127,7 @@ def crawl_product(product_list=[]):
             description = parser.find('div', {'class': 'content has-table'}).text
         else:
             description = ""
+            
         info = ""
         for i in parser.findAll('h5'):
             info += i.text
@@ -150,9 +147,7 @@ def crawl_product(product_list=[]):
 
     return
 
-
 product_type_list, page1 = crawl_product_type()
-
 save_product_type(product_type_list)
 print("No. Type", len(product_type_list))
 
@@ -166,9 +161,5 @@ print("No. Product ID: ", len(product_list))
 save_product_id(product_list)
 
 # crawl detail for each product id
-
 page2 = crawl_product(product_list)
 
-# product_list = load_raw_product()
-# save product to csv
-#save_product_list()
